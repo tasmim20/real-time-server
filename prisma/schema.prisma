@@ -20,17 +20,16 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  messages  Message[] @relation("UserMessages")
+  id        String   @id @default(cuid())
+  username  String   @unique
+  messages  Message[]
 }
 
+
 model Message {
-  id          Int      @id @default(autoincrement())
-  content     String
-  senderId    Int
-  receiverId  Int
-  sender      User     @relation("UserMessages", fields: [senderId], references: [id])
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  message   String
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
 }
