@@ -1,30 +1,25 @@
-// import { Injectable } from '@nestjs/common';
-// import { PrismaService } from 'prisma/prisma.service';
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'prisma/prisma.service';
 
-// @Injectable()
-// export class UserService {
-//   constructor(private prisma: PrismaService) {}
+@Injectable()
+export class UserService {
+  constructor(private prisma: PrismaService) {}
 
-//   // Fetch all users
-//   async getUsers() {
-//     return this.prisma.user.findMany();
-//   }
-
-//   // Create a user
-//   async createUser(data: { name: string; email: string }) {
-//     return this.prisma.user.create({
-//       data,
-//     });
-//   }
-
-//   // Save a message
-//   async saveMessage(senderId: number, receiverId: number, content: string) {
-//     return this.prisma.message.create({
-//       data: {
-//         senderId,
-//         receiverId,
-//         content,
-//       },
-//     });
-//   }
-// }
+  // Method to create a new user
+  async createUser(username: string) {
+    // Create user in the database
+    const newUser = await this.prisma.user.create({
+      data: { username },
+    });
+    return newUser;
+  }
+  async getAllUsers() {
+    return this.prisma.user.findMany(); // Prisma query to get all users
+  }
+  // Method to get a user by their username
+  async getUserByUsername(username: string) {
+    return this.prisma.user.findUnique({
+      where: { username },
+    });
+  }
+}

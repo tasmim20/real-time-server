@@ -1,30 +1,23 @@
-// import { Controller, Get, Post, Body } from '@nestjs/common';
-// import { UserService } from './user.service';
+import { Controller, Post, Get, Body, Param } from '@nestjs/common';
+import { UserService } from './user.service'; // Import the user service
 
-// @Controller('users')
-// export class UserController {
-//   constructor(private readonly userService: UserService) {}
+@Controller('users')
+export class UserController {
+  constructor(private readonly userService: UserService) {}
 
-//   @Get()
-//   async getUsers() {
-//     return this.userService.getUsers();
-//   }
+  // Route to create a new user
+  @Post()
+  async createUser(@Body() body: { username: string }) {
+    const { username } = body;
+    return this.userService.createUser(username);
+  }
 
-//   @Post()
-//   async createUser(@Body() body: { name: string; email: string }) {
-//     return this.userService.createUser(body);
-//   }
-
-//   @Post('message')
-//   // eslint-disable-next-line prettier/prettier
-//   async saveMessage(
-//     @Body() body: { senderId: number; receiverId: number; content: string },
-//   ) {
-//     // eslint-disable-next-line prettier/prettier
-//     return this.userService.saveMessage(
-//       body.senderId,
-//       body.receiverId,
-//       body.content,
-//     );
-//   }
-// }
+  @Get()
+  getAllUsers() {
+    return this.userService.getAllUsers(); // No async/await needed if the method is not asynchronous
+  }
+  @Get(':username') // This handles requests like /users/{username}
+  async getUser(@Param('username') username: string) {
+    return this.userService.getUserByUsername(username);
+  }
+}
